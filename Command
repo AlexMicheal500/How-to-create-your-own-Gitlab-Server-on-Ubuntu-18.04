@@ -1,0 +1,71 @@
+Step 1 – Installing Dependencies
+Before we begin to install Gitlab, you will need to make sure your server has certain software installed so that Gitlab can run properly. Run the following commands to install the dependencies.
+
+$ sudo apt update
+$ sudo apt install ca-certificates curl openssh-server ufw apt-transport-https -y
+Some of the software above may be pre-installed for you.
+
+Next, you will need postfix to send notification emails. If you want to use another solution, then skip this step and you can configure an external SMPT server after you have installed Gitlab. 
+
+$ sudo apt install postfix -y
+For the postfix installation, select Internet Site when prompted. Enter the domain name you are going to use for your Gitlab server on the next screen.
+Step 2 – Configure Firewall
+Before proceeding ahead, we need to configure the ufw firewall we installed in the previous step. Before we enable and configure the firewall, we need to enable SSH so that we don’t get locked out of our server. 
+
+$ sudo ufw allow OpenSSH
+It is safe now to enable the firewall. Just enter y when presented with the prompt. 
+
+$ sudo ufw enable
+We need to enable http, https, and Postfix for Gitlab to operate. 
+
+$ sudo ufw allow http
+$ sudo ufw allow https
+$ sudo ufw allow Postfix
+We need to check the status that everything is working fine. 
+
+$ sudo ufw status
+You should see the following output which will tell you everything is working fine. 
+
+Status: active
+Step 3 – Add the repository and install Gitlab
+Run the following command to add the following repository. 
+
+$ curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+Install the Gitlab CE package. Replace example.github.com with the domain you will be using for your Gitlab install. If you want Gitlab to automatically install an HTTPS certificate for you using Let’s Encrypt, choose https in the command below. If you want to use your certificate or don’t want to use https, use HTTP below. 
+
+$ sudo EXTERNAL_URL="https://gitlab-server.example.com" apt-get install gitlab-ee
+Even though we talked about the community edition in the beginning, yet we are installing the Enterprise edition here. It is because, if in future you need to upgrade to the paid version, it can be done via a single click. If you install the community edition, then to switch to the enterprise edition you will need to do a manual upgrade which can lead to downtime. Enterprise edition without the license will behave just like the Community edition and is the recommended way to install.
+
+Step 4 – Run the Installer
+Navigate to the URL chosen in the previous step in your web browser. You will be redirected to Gitlab’s password reset screen. Provide a password for Gitlab Administrator’s account.
+
+Step 9 – Add SSH Key
+The last step is adding our SSH key. If you have an SSH key, you can skip the following command. If you don’t have one, you can create one using the following command. 
+
+$ ssh-keygen
+This command is common to Mac OS, Linux and Git Bash/WSL on Windows. Accept the defaults and provide a password when asked for to secure the key. 
+
+Generating public/private rsa key pair.
+Enter file in which to save the key (/c/Users/<Username>/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /c/Users/<Username>/.ssh/id_rsa.
+Your public key has been saved in /c/Users/<Username>/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:j8Pd5kXM04+tFoppivHaYN5gjYE95Rd4Fc4YXz2MqYE <Username>@WIN10DESKTOP
+The key's randomart image is:
++---[RSA 3072]----+
+|          o o.=. |
+|         E O + o.|
+|        o + *   .|
+|     o o . o o . |
+|    . + S .   = .|
+|       * = . ..+.|
+|      B = ooo.o.o|
+|     + O .+o.... |
+|      +.=o  ...  |
++----[SHA256]-----+
+You can display your public key via the following command 
+
+$ cat ~/.ssh/id_rsa.pub
+
