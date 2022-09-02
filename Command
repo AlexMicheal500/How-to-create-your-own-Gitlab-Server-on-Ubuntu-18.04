@@ -69,3 +69,4 @@ You can display your public key via the following command
 
 $ cat ~/.ssh/id_rsa.pub
 
+To see the full documentation check: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-gitlab-on-ubuntu-18-04
